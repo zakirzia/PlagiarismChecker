@@ -54,10 +54,8 @@ public class File {
 
     private boolean isSentenceDelimiter(char chr) {
         Set<Character> delimiters = new HashSet<Character>();
-        //delimiters.add('.');
         delimiters.add('!');
         delimiters.add('?');
-        //delimiters.add(';');
         return delimiters.contains(chr);
     }
 
@@ -79,15 +77,13 @@ public class File {
         }
     }
 
-    /*
     public ArrayList<String> getSentences() {
         return sentences;
     }
-     */
 
     public void printSentences() {
         for (int i = 0; i < this.sentences.size(); ++i) {
-            System.out.println("Sentence " + i + ": " + this.sentences.get(i));
+            System.out.println("Sentence " + (i+1) + ": " + this.sentences.get(i));
         }
     }
 
@@ -97,13 +93,14 @@ public class File {
 
     public void printTokens() {
         for (int i = 0; i < this.tokens.size(); ++i) {
-            System.out.println("Sentence " + i + ": " + this.tokens.get(i));
+            System.out.println("Sentence " + (i+1) + ": " + this.tokens.get(i));
         }
     }
 
     public static void main(String[] args) {
         File new_file = new File("/Users/peacemaker/project/test1.txt");
         new_file.printSentences();
+        System.out.println("\n");
         new_file.printTokens();
     }
 }
