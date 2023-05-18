@@ -4,20 +4,16 @@ import java.io.FileReader;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class File {
     public String name;
     private ArrayList<String> sentences = new ArrayList<>();
     private ArrayList<ArrayList<String>> tokens = new ArrayList<>();
-    private ArrayList<ArrayList<Integer>> quotedText = new ArrayList<>();
 
     public File(String fileName) {
         this.name = fileName;
         readFile();
         tokenize();
-        fillQuotedText();
     }
 
     private void readFile() {
@@ -61,7 +57,7 @@ public class File {
         //delimiters.add('.');
         delimiters.add('!');
         delimiters.add('?');
-        delimiters.add(';');
+        //delimiters.add(';');
         return delimiters.contains(chr);
     }
 
@@ -83,64 +79,11 @@ public class File {
         }
     }
 
-    private void fillQuotedText() {
-        for (int i = 0; i < this.sentences.size(); ++i) {
-            ArrayList<Integer> emptyList = new ArrayList<>();
-            this.quotedText.add(emptyList);
-            boolean isQuote = false;
-            int fromTokenIndex = 0;
-            int toTokenIndex = 0;
-            int tokenIndex = 0;
-            String cleanedSentence = this.sentences.get(i).replaceAll("[;,]", " ");
-            cleanedSentence = cleanedSentence.replaceAll("\\s+", " ");
-            cleanedSentence = cleanedSentence.replaceAll("\\s+-\\s+", " ");
-            cleanedSentence = cleanedSentence.replaceAll("\"\\s+", "\"");
-            cleanedSentence = cleanedSentence.replaceAll("\\s+\"", "\"");
-            for (int c = 0; c < cleanedSentence.length(); ++c) {
-                char chr = cleanedSentence.charAt(c);
-                if (chr == ' ') {
-                    tokenIndex += 1;
-                }
-                if (chr == '\"' && !isQuote) {
-                    fromTokenIndex = tokenIndex;
-                    isQuote = true;
-                } else if (chr == '\"') {
-                    toTokenIndex = tokenIndex;
-                    isQuote = false;
-                    this.quotedText.get(i).add(fromTokenIndex);
-                    this.quotedText.get(i).add(toTokenIndex);
-                }
-            }
-        }
-    }
-
-    private void fillQuotedTextV2(){
-        Pattern pattern = Pattern.compile("\"(.*?)\"");
-        for (int i = 0; i < this.sentences.size(); ++i){
-            ArrayList<Integer> emptyList = new ArrayList<>();
-            this.quotedText.add(emptyList);
-            String sentence = this.sentences.get(i);
-            String quote = "";
-            Matcher quotes = pattern.matcher(sentence);
-            while (quotes.find()) {
-                quote = quotes.group(1);
-                quote = quote.replaceAll("[\\p{Punct}]", "").replaceAll("\\s+", " ");
-                // Convert to lowercase
-                quote = quote.toLowerCase();
-
-                StringTokenizer string = new StringTokenizer(quote, " ");
-
-                while (string.hasMoreTokens()) {
-                    //tokenizedSentence.add(string.nextToken());
-                }
-            }
-        }
-
-    }
-
+    /*
     public ArrayList<String> getSentences() {
         return sentences;
     }
+     */
 
     public void printSentences() {
         for (int i = 0; i < this.sentences.size(); ++i) {
@@ -158,28 +101,9 @@ public class File {
         }
     }
 
-    public ArrayList<ArrayList<Integer>> getQuotedText() {
-        return quotedText;
-    }
-
-    public void printQuotedText() {
-        System.out.println("Print tokens from quotes for each sentence, if there exist:");
-        for (int i = 0; i < this.quotedText.size(); ++i) {
-            if (!this.quotedText.get(i).isEmpty()) {
-                System.out.println("For sentence " + i + ":");
-                for (int j = 0; j < this.quotedText.get(i).size(); j += 2) {
-                    int fromIndex = this.quotedText.get(i).get(j);
-                    int toIndex = this.quotedText.get(i).get(j+1);
-                    System.out.println(this.tokens.get(i).subList(fromIndex,toIndex+1));
-                }
-            }
-        }
-    }
-
     public static void main(String[] args) {
         File new_file = new File("/Users/peacemaker/project/test1.txt");
         new_file.printSentences();
         new_file.printTokens();
-        new_file.printQuotedText();
     }
 }
