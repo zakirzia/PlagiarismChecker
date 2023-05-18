@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="640aa52b-b28d-48b2-b071-9cab6b191ddb" name="Changes" comment="Defined Pair class.">
-      <change afterPath="$PROJECT_DIR$/src/Checker.java" afterDir="false" />
+    <list default="true" id="640aa52b-b28d-48b2-b071-9cab6b191ddb" name="Changes" comment="Defined Checker class. Word frequency.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Checker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Checker.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,12 +75,20 @@
       <option name="project" value="LOCAL" />
       <updated>1684446378825</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Defined Checker class. Word frequency.">
+      <created>1684446943474</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1684446943474</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Defined File class for sentence tokenization and file reading." />
     <MESSAGE value="Defined Pair class." />
-    <option name="LAST_COMMIT_MESSAGE" value="Defined Pair class." />
+    <MESSAGE value="Defined Checker class. Word frequency." />
+    <option name="LAST_COMMIT_MESSAGE" value="Defined Checker class. Word frequency." />
   </component>
 </project>
