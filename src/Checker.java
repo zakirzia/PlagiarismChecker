@@ -2,17 +2,14 @@ import java.util.*;
 
 public class Checker {
     private ArrayList<File> files = new ArrayList<>();
-    private Set<String> allWords = new HashSet<>();
-
     private int threshold = 3;
 
-    public Checker(String[] fileNames, int threshold) {
+    public Checker(ArrayList<String> fileNames, int threshold) {
         for (String f_name : fileNames) {
             File file = new File(f_name);
             this.files.add(file);
         }
         this.threshold = threshold;
-        collectAllWords();
     }
 
     private File getFileByName(String fileName) {
@@ -22,33 +19,6 @@ public class Checker {
             }
         }
         return null;
-    }
-
-    private void collectAllWords() {
-        for (File file : this.files) {
-            for (ArrayList<String> sentence : file.getTokens()) {
-                this.allWords.addAll(sentence);
-            }
-        }
-    }
-
-    public Set<String> getAllWords() {
-        return allWords;
-    }
-
-    public HashMap<String, Integer> wordFrequencyPerFile(String fileName) {
-        File file = getFileByName(fileName);
-        HashMap<String, Integer> wordFrequency = new HashMap<>();
-        for (String uniqueToken : this.allWords) {
-            wordFrequency.put(uniqueToken, 0);
-        }
-
-        for (ArrayList<String> sentence : file.getTokens()) {
-            for (String token : sentence) {
-                wordFrequency.put(token, wordFrequency.get(token) + 1);
-            }
-        }
-        return wordFrequency;
     }
 
     public ArrayList<HashMap<String, Integer>> compareWordFrequency(String fileName1, String fileName2) {
@@ -179,15 +149,15 @@ public class Checker {
     }
 
     public static void main(String[] args) {
-        String[] files = { "/Users/peacemaker/project/test1.txt", "/Users/peacemaker/project/test2.txt"};
+        ArrayList<String> files = new ArrayList<>(Arrays.asList("/Users/peacemaker/project/test1.txt", "/Users/peacemaker/project/test2.txt"));
         Checker checker = new Checker(files, 3);
         HashMap<Pair, Integer> matchTable = new HashMap<>();
-        for (int i = 0; i < files.length; i++) {
-            for (int j = 0; j < files.length; j++) {
+        for (int i = 0; i < files.size(); i++) {
+            for (int j = 0; j < files.size(); j++) {
                 if (i != j) {
-                    HashMap<Pair, ArrayList<ArrayList<String>>> matchesResults = checker.phraseMatching(files[i], files[j]);
-                    checker.printMatchingPhrases(matchesResults, files[i], files[j]);
-                    System.out.println("Phrase matching for " + files[j] + " compared with " + files[i] + ": " + checker.getMatchedPhrasesStatistics(matchesResults, files[j]));
+                    HashMap<Pair, ArrayList<ArrayList<String>>> matchesResults = checker.phraseMatching(files.get(0), files.get(1));
+                    checker.printMatchingPhrases(matchesResults, files.get(0), files.get(1));
+                    System.out.println("Phrase matching for " + files.get(0) + " compared with " + files.get(1) + ": " + checker.getMatchedPhrasesStatistics(matchesResults, files.get(1)));
                 }
             }
         }
