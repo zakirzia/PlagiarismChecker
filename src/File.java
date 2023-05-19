@@ -21,9 +21,17 @@ public class File {
         try (BufferedReader br = new BufferedReader(new FileReader(this.name))) {
             int c = 0;
             int dotCounter = 0;
+            boolean isQuote = false;
             while ((c = br.read()) != -1) {
                 char chr = (char) c;
                 if (!isSentenceDelimiter(chr)) {
+                    if (chr == '"') {
+                        isQuote = !isQuote;
+                        //continue;
+                    }
+                    if(isQuote) {
+                        continue;
+                    }
                     if (chr != '\n' && chr != '.') {
                         if (dotCounter == 3) {
                             sentence.append("...");
@@ -100,7 +108,6 @@ public class File {
     public static void main(String[] args) {
         File new_file = new File("/Users/peacemaker/project/test1.txt");
         new_file.printSentences();
-        System.out.println("\n");
         new_file.printTokens();
     }
 }
