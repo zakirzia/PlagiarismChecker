@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="640aa52b-b28d-48b2-b071-9cab6b191ddb" name="Changes" comment="Defined Main class.">
+    <list default="true" id="640aa52b-b28d-48b2-b071-9cab6b191ddb" name="Changes" comment="Defined Main class. HTML for Word Frequencies.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Checker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Checker.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/File.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/File.java" afterDir="false" />
@@ -112,7 +112,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684494246502</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Defined Main class. HTML for Word Frequencies.">
+      <created>1684501887138</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1684501887138</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -123,6 +130,7 @@
     <MESSAGE value="Defined File class (updated, ignores sentences inside quotes)." />
     <MESSAGE value="Defined Checker class. Word Frequency, Phrase Matching (updated, sorts the results)." />
     <MESSAGE value="Defined Main class." />
-    <option name="LAST_COMMIT_MESSAGE" value="Defined Main class." />
+    <MESSAGE value="Defined Main class. HTML for Word Frequencies." />
+    <option name="LAST_COMMIT_MESSAGE" value="Defined Main class. HTML for Word Frequencies." />
   </component>
 </project>
