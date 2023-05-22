@@ -33,7 +33,7 @@ public class Main {
         return final_res;
     }
 
-    public static void HTMLForWordFrequency(LinkedHashMap<String, Integer> sortedWordFrequency1, LinkedHashMap<String, Integer> sortedWordFrequency2, String file1, String file2, LinkedHashMap<String, Integer> phraseMatchRes) {
+    public static void HTMLForWordFrequency(LinkedHashMap<String, Integer> sortedWordFrequency1, LinkedHashMap<String, Integer> sortedWordFrequency2, String file1, String file2, LinkedHashMap<String, Integer> phraseMatchRes, Checker checker) {
         try {
             String filename1 = new File(file1).getName();
             String filename2 = new File(file2).getName();
@@ -80,6 +80,16 @@ public class Main {
             writer.println("</tr>");
 
             writer.println("</table>");
+
+            // For getHighLighting
+            ArrayList<String> highlightedTexts = getHighLighting(file1, file2, checker);
+            writer.println("<h1>Phrase Matches in " + filename1 + "</h1>");
+            writer.println("<p>" + highlightedTexts.get(0) + "</p>");
+            writer.println("<h1>Phrase Matches in " + filename2 + "</h1>");
+            writer.println("<p>" + highlightedTexts.get(1) + "</p>");
+
+            writer.println("<h3><a href='phraseMatching.html'>Home</a></h3>");
+
             writer.println("</body></html>");
 
             writer.close();
@@ -124,6 +134,7 @@ public class Main {
             }
 
             writer.println("</table>");
+            writer.println("<h3><a href='phraseMatching.html'>Home</a></h3>");
             writer.println("</body></html>");
             writer.close();
         } catch (FileNotFoundException e) {
@@ -186,13 +197,50 @@ public class Main {
 
             writer.println("</table>");
 
-            writer.println("<p><a href='AllWordFrequencies.html'>Word Frequencies for all of the files</a></p>");
+            writer.println("<h1><a href='AllWordFrequencies.html'>Word Frequencies for all of the files</a></h1>");
 
             writer.println("</body></html>");
             writer.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public static ArrayList<String> getHighLighting(String file1Name, String file2Name, Checker checker) {
+        HashMap<Pair, ArrayList<ArrayList<String>>> matches = checker.phraseMatching(file1Name, file2Name);
+        StringBuilder highlightedFile1 = new StringBuilder();
+        StringBuilder highlightedFile2 = new StringBuilder();
+
+        ArrayList<Integer> sentencesToMatch1 = new ArrayList<>();
+        ArrayList<Integer> sentencesToMatch2 = new ArrayList<>();
+//        for(Pair pair: matches.keySet()){
+//            System.out.println(pair.first + " " + pair.second);
+//        }
+        for (Pair pair : matches.keySet()) {
+            if(!sentencesToMatch1.contains(pair.first)) {
+                sentencesToMatch1.add(pair.first);
+            }
+            if(!sentencesToMatch2.contains(pair.second)){
+                sentencesToMatch2.add(pair.second);
+            }
+        }
+
+//        System.out.println(sentencesToMatch1);
+//        System.out.println(sentencesToMatch2);
+
+        for(Integer sentenceIdn: sentencesToMatch1){
+            String sentence1 = checker.highlightMatch(file1Name, sentenceIdn, checker.collectMatches(matches,sentenceIdn,true), "<mark>", "</mark>");
+            highlightedFile1.append(sentence1);
+        }
+        for(Integer sentenceIdn: sentencesToMatch2){
+            String sentence2 = checker.highlightMatch(file2Name, sentenceIdn, checker.collectMatches(matches,sentenceIdn,false), "<mark>", "</mark>");
+            highlightedFile2.append(sentence2);
+        }
+
+        ArrayList<String> highlightedTexts = new ArrayList<>();
+        highlightedTexts.add(highlightedFile1.toString());
+        highlightedTexts.add(highlightedFile2.toString());
+        return highlightedTexts;
     }
 
     public static void main(String[] args) {
@@ -215,12 +263,12 @@ public class Main {
         ArrayList<String> files = new ArrayList<>(Arrays.asList("/Users/peacemaker/IdeaProjects/PlagiarismChecker/src/test1.txt", "/Users/peacemaker/IdeaProjects/PlagiarismChecker/src/test2.txt", "/Users/peacemaker/IdeaProjects/PlagiarismChecker/src/test3.txt"));
         Checker checker = new Checker(files, threshold);
 
-        for (String file : files) {
-            System.out.println("For file " + file);
-            LinkedHashMap<String, Integer> res = phraseMatchResultPerFile(checker, file, files);
-            System.out.println(res);
-            System.out.println("\n");
-        }
+//        for (String file : files) {
+//            System.out.println("For file " + file);
+//            LinkedHashMap<String, Integer> res = phraseMatchResultPerFile(checker, file, files);
+//            System.out.println(res);
+//            System.out.println("\n");
+//        }
 
         for (int i = 0; i < files.size(); i++) {
             for (int j = 0; j < files.size(); j++) {
@@ -231,11 +279,12 @@ public class Main {
 
                     LinkedHashMap<String, Integer> phraseMatchRes = phraseMatchResultPerFile(checker, files.get(i), files);
 
-                    HTMLForWordFrequency(sortedFreq1, sortedFreq2, files.get(i), files.get(j), phraseMatchRes);
+                    HTMLForWordFrequency(sortedFreq1, sortedFreq2, files.get(i), files.get(j), phraseMatchRes, checker);
                 }
             }
         }
         HTMLForAllWordFrequencies(files, checker);
         HTMLForPhraseMatching(files, checker);
+        //getHighLighting("/Users/peacemaker/IdeaProjects/PlagiarismChecker/src/test1.txt", "/Users/peacemaker/IdeaProjects/PlagiarismChecker/src/test2.txt", checker);
     }
 }
