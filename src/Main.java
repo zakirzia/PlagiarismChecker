@@ -88,12 +88,54 @@ public class Main {
         }
     }
 
+    public static void HTMLForAllWordFrequencies(ArrayList<String> files, Checker checker) {
+        try {
+            PrintWriter writer = new PrintWriter(new FileOutputStream("AllWordFrequencies.html"));
+            writer.println("<html>");
+            writer.println("<body>");
+            writer.println("<h1>Word Frequencies for all of the files:</h1>");
+            writer.println("<table border='1'>");
+
+            writer.println("<tr>");
+            writer.println("<th>Word</th>");
+            for (String file : files) {
+                String fileName = new File(file).getName();
+                writer.println("<th>" + fileName + "</th>");
+            }
+            writer.println("</tr>");
+
+            HashSet<String> allWords = new HashSet<>();
+            for (String file : files) {
+                ArrayList<HashMap<String, Integer>> frequencies = checker.compareWordFrequency(file, file);
+                HashMap<String, Integer> frequencyMap = frequencies.get(0);
+                allWords.addAll(frequencyMap.keySet());
+            }
+
+            for (String word : allWords) {
+                writer.println("<tr>");
+                writer.println("<td>" + word + "</td>");
+
+                for (String file : files) {
+                    ArrayList<HashMap<String, Integer>> frequencies = checker.compareWordFrequency(file, file);
+                    HashMap<String, Integer> frequencyMap = frequencies.get(0);
+                    writer.println("<td>" + frequencyMap.getOrDefault(word, 0) + "</td>");
+                }
+                writer.println("</tr>");
+            }
+
+            writer.println("</table>");
+            writer.println("</body></html>");
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void HTMLForPhraseMatching(ArrayList<String> files, Checker checker) {
         try {
             PrintWriter writer = new PrintWriter(new FileOutputStream("phraseMatching.html"));
 
             writer.println("<html>");
-            writer.println("<head><title>Phrase Matching</title></head>");
             writer.println("<body>");
 
             for (String file : files) {
@@ -144,6 +186,8 @@ public class Main {
 
             writer.println("</table>");
 
+            writer.println("<p><a href='AllWordFrequencies.html'>Word Frequencies for all of the files</a></p>");
+
             writer.println("</body></html>");
             writer.close();
         } catch (FileNotFoundException e) {
@@ -156,6 +200,17 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the threshold value:");
         int threshold = scanner.nextInt();
+
+//        ArrayList<String> files = new ArrayList<>();
+//        System.out.println("Please enter the number of files you want to check for plagiarism:");
+//        int numOfFiles = scanner.nextInt();
+//        scanner.nextLine();
+//
+//        for(int i = 0; i < numOfFiles; i++){
+//            System.out.println("Please enter the path for file " + (i + 1) + ":");
+//            String filePath = scanner.nextLine();
+//            files.add(filePath);
+//        }
 
         ArrayList<String> files = new ArrayList<>(Arrays.asList("/Users/peacemaker/IdeaProjects/PlagiarismChecker/src/test1.txt", "/Users/peacemaker/IdeaProjects/PlagiarismChecker/src/test2.txt", "/Users/peacemaker/IdeaProjects/PlagiarismChecker/src/test3.txt"));
         Checker checker = new Checker(files, threshold);
@@ -180,7 +235,7 @@ public class Main {
                 }
             }
         }
-
+        HTMLForAllWordFrequencies(files, checker);
         HTMLForPhraseMatching(files, checker);
     }
 }
