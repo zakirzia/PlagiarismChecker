@@ -1,19 +1,17 @@
-import java.util.ArrayList;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
-public class File {
+public class MyFile {
     public String name;
     private ArrayList<String> sentences = new ArrayList<>();
     private ArrayList<ArrayList<String>> tokens = new ArrayList<>();
+    private ArrayList<ArrayList<String>> parsed = new ArrayList<>();
 
-    public File(String fileName) {
+    public MyFile(String fileName) {
         this.name = fileName;
         readFile();
         tokenize();
+        fullParser();
     }
 
     private void readFile() {
@@ -29,7 +27,7 @@ public class File {
                         isQuote = !isQuote;
                         //continue;
                     }
-                    if(isQuote) {
+                    if (isQuote) {
                         continue;
                     }
                     if (chr != '\n' && chr != '.') {
@@ -52,7 +50,7 @@ public class File {
                 }
 
             }
-            if (sentence.length()>0){
+            if (sentence.length() > 0) {
                 this.sentences.add(sentence.toString());
             }
         } catch (Exception exception) {
@@ -85,13 +83,58 @@ public class File {
         }
     }
 
+    private void fullParser() {
+        StringBuilder token = new StringBuilder();
+        ArrayList<String> sentence = new ArrayList<>();
+        int dotCounter = 0;
+        try (BufferedReader br = new BufferedReader(new FileReader(this.name))) {
+            int c = 0;
+            while ((c = br.read()) != -1) {
+                char chr = (char) c;
+                if (checkCharForParsing(chr)) {
+                    token.append(chr);
+                    if (dotCounter == 1) {
+                        this.parsed.add(sentence);
+                        sentence = new ArrayList<>();
+                    }
+                    dotCounter = 0;
+                } else {
+                    sentence.add(token.toString());
+                    token.setLength(0);
+                    sentence.add(String.valueOf(chr));
+                    if (chr == '!' || chr == '?') {
+                        this.parsed.add(sentence);
+                        sentence = new ArrayList<>();
+                        dotCounter = 0;
+                    }
+                    if (chr == '.') {
+                        dotCounter += 1;
+                    }
+                }
+            }
+            if (sentence.size() > 0) {
+                this.parsed.add(sentence);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private boolean checkCharForParsing(char chr) {
+        if (Character.isLetter(chr) || chr == '-') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public ArrayList<String> getSentences() {
         return sentences;
     }
 
     public void printSentences() {
         for (int i = 0; i < this.sentences.size(); ++i) {
-            System.out.println("Sentence " + (i+1) + ": " + this.sentences.get(i));
+            System.out.println("Sentence " + (i + 1) + ": " + this.sentences.get(i));
         }
     }
 
@@ -101,13 +144,28 @@ public class File {
 
     public void printTokens() {
         for (int i = 0; i < this.tokens.size(); ++i) {
-            System.out.println("Sentence " + (i+1) + ": " + this.tokens.get(i));
+            System.out.println("Sentence " + (i + 1) + ": " + this.tokens.get(i));
         }
     }
 
+    public ArrayList<ArrayList<String>> getParsed() {
+        return parsed;
+    }
+
     public static void main(String[] args) {
-        File new_file = new File("/Users/peacemaker/project/test1.txt");
-        new_file.printSentences();
-        new_file.printTokens();
+        MyFile new_My_My_file = new MyFile("/Users/peacemaker/IdeaProjects/PlagiarismChecker/src/test1.txt");
+        new_My_My_file.printSentences();
+        new_My_My_file.printTokens();
+        System.out.println(new_My_My_file.parsed);
+        String filename = "output.txt";
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            for (ArrayList<String> sentence : new_My_My_file.parsed) {
+                for (String item : sentence) {
+                    writer.write(item);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred while writing to file: " + e.getMessage());
+        }
     }
 }
