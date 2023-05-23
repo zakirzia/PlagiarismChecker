@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="640aa52b-b28d-48b2-b071-9cab6b191ddb" name="Changes" comment="Define Main class. HTML for Word Frequencies, Phrase Matching and HTML for all word frequencies in all the files, gets threshold and file paths from the user input.">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+    <list default="true" id="640aa52b-b28d-48b2-b071-9cab6b191ddb" name="Changes" comment="Main Class.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Checker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Checker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/File.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MyFile.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MyFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MyFile.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,7 +134,28 @@
       <option name="project" value="LOCAL" />
       <updated>1684782106759</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="MyFile (renamed from File).">
+      <created>1684788326847</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1684788326847</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Checker Class. Now also provides highlighted text for a pair of files with matched phrases.">
+      <created>1684788428181</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1684788428181</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Main Class.">
+      <created>1684788441278</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1684788441278</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -150,6 +170,9 @@
     <MESSAGE value="Define Main class. HTML for Word Frequencies and Phrase Matching." />
     <MESSAGE value="Define Main class. HTML for Word Frequencies and Phrase Matching, gets threshold from the user input." />
     <MESSAGE value="Define Main class. HTML for Word Frequencies, Phrase Matching and HTML for all word frequencies in all the files, gets threshold and file paths from the user input." />
-    <option name="LAST_COMMIT_MESSAGE" value="Define Main class. HTML for Word Frequencies, Phrase Matching and HTML for all word frequencies in all the files, gets threshold and file paths from the user input." />
+    <MESSAGE value="MyFile (renamed from File)." />
+    <MESSAGE value="Checker Class. Now also provides highlighted text for a pair of files with matched phrases." />
+    <MESSAGE value="Main Class." />
+    <option name="LAST_COMMIT_MESSAGE" value="Main Class." />
   </component>
 </project>

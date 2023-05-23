@@ -2,8 +2,9 @@ import java.util.*;
 
 public class Checker {
     private ArrayList<MyFile> myFiles = new ArrayList<>();
-    private int threshold = 3;
+    private int threshold;
 
+    // Constructor for the Checker Class
     public Checker(ArrayList<String> fileNames, int threshold) {
         for (String f_name : fileNames) {
             MyFile myFile = new MyFile(f_name);
@@ -21,15 +22,21 @@ public class Checker {
         return null;
     }
 
+    // Word Frequency
     public ArrayList<HashMap<String, Integer>> compareWordFrequency(String fileName1, String fileName2) {
         MyFile myFile1 = getFileByName(fileName1);
         MyFile myFile2 = getFileByName(fileName2);
+       // HashSet stores all unique tokens
         HashSet<String> UniqueTokens = new HashSet<>();
+        // HashMaps store Word Frequency for both files
         HashMap<String, Integer> wordFrequency1 = new HashMap<>();
         HashMap<String, Integer> wordFrequency2 = new HashMap<>();
+
+        // Adds all tokens from the first file sentences to UniqueTokens
         for (ArrayList<String> sentence : myFile1.getTokens()) {
             UniqueTokens.addAll(sentence);
         }
+        // Adds all tokens from the second file sentences to UniqueTokens
         for (ArrayList<String> sentence : myFile2.getTokens()) {
             UniqueTokens.addAll(sentence);
         }
@@ -39,23 +46,29 @@ public class Checker {
         for (String token : UniqueTokens) {
             wordFrequency2.put(token, 0);
         }
+        // Calculates Word Frequency for the first file
         for (ArrayList<String> sentence : myFile1.getTokens()) {
             for (String token : sentence) {
                 wordFrequency1.put(token, wordFrequency1.get(token) + 1);
             }
         }
+        // Calculates Word Frequency for the second file
         for (ArrayList<String> sentence : myFile2.getTokens()) {
             for (String token : sentence) {
                 wordFrequency2.put(token, wordFrequency2.get(token) + 1);
             }
         }
+
+        // Holds wordFrequency1 and wordFrequency2
         ArrayList<HashMap<String, Integer>> result = new ArrayList<>();
         result.add(wordFrequency1);
         result.add(wordFrequency2);
         return result;
     }
 
+    // Phrase Matching
     public HashMap<Pair, ArrayList<ArrayList<String>>> phraseMatching(String fileName1, String fileName2) {
+        // matchedPairs stores matched phrases and indexes of sentences
         HashMap<Pair, ArrayList<ArrayList<String>>> matchedPairs = new HashMap<>();
         MyFile myFile1 = getFileByName(fileName1);
         MyFile myFile2 = getFileByName(fileName2);
@@ -85,6 +98,7 @@ public class Checker {
                             if (matchCount >= this.threshold) {
                                 Pair pair = new Pair(sent1Ind, sent2Ind);
                                 if (matchedPairs.containsKey(pair)) {
+                                    // Checks that matchedPairs does not have all the values from match
                                     if (!ifContains(matchedPairs.get(pair), match)) {
                                         matchedPairs.get(pair).add(match);
                                     }
@@ -111,6 +125,7 @@ public class Checker {
         return false;
     }
 
+    // Returns all matched pairs for the sentence
     public ArrayList<ArrayList<String>> collectMatches(HashMap<Pair, ArrayList<ArrayList<String>>> matchedPairs, int sentenceInd, boolean isFirstFile) {
         ArrayList<ArrayList<String>> matchesFromSameSentence = new ArrayList<>();
         for (Pair pair : matchedPairs.keySet()) {
@@ -124,15 +139,7 @@ public class Checker {
         return matchesFromSameSentence;
     }
 
-    public void printMatchingPhrases(HashMap<Pair, ArrayList<ArrayList<String>>> matchedPairs, String fileName1, String fileName2) {
-        for (Pair pair : matchedPairs.keySet()) {
-            System.out.println("Sentence " + pair.first + " in " + fileName1 + " matches with sentence " + pair.second + " in " + fileName2);
-            for (ArrayList<String> match : matchedPairs.get(pair)) {
-                System.out.println(match);
-            }
-        }
-    }
-
+    // Calculates Phrase Matching %
     public int getMatchedPhrasesStatistics(HashMap<Pair, ArrayList<ArrayList<String>>> matchedPairs, String fileName) {
         MyFile myFile = getFileByName(fileName);
         int totalWordsFile = 0;
@@ -141,7 +148,7 @@ public class Checker {
         }
         int matchingWords = 0;
 
-        // make copy
+        // copiedTokens stores the copy of the tokens
         ArrayList<ArrayList<String>> copiedTokens = new ArrayList<>();
         for (ArrayList<String> sentence : myFile.getTokens()) {
             ArrayList<String> copySentence = new ArrayList<>(sentence);
@@ -161,8 +168,10 @@ public class Checker {
         return (int) (((double) matchingWords / (double) totalWordsFile) * 100);
     }
 
+    // Returns the start and the end indexes of the matched tokens, if it finds them
     public Pair getMatchToHighlight(int sentenceInd, ArrayList<String> tokens, String fileName) {
         MyFile myFile = getFileByName(fileName);
+        // Store the start and the end indexes of the matched tokens
         int start = -1;
         int end = -1;
         for (int i = 0; i < myFile.getParsed().get(sentenceInd).size(); i++) {
@@ -194,8 +203,11 @@ public class Checker {
         return new Pair(-1, -1);
     }
 
+    // Highlights matched parts of the sentence
     public String highlightMatch(String fileName, int sentenceInd, ArrayList<ArrayList<String>> match, String OpenTag, String CloseTag) {
+        // Stores the index for open tag
         ArrayList<Integer> openTagsPlaces = new ArrayList<>();
+        // Stores the index for close tag
         ArrayList<Integer> closeTagsPlaces = new ArrayList<>();
         for (ArrayList<String> part : match) {
             Pair pair = getMatchToHighlight(sentenceInd, part, fileName);
@@ -220,23 +232,5 @@ public class Checker {
             highlightedSentence.append(sentence.get(i));
         }
         return highlightedSentence.toString();
-    }
-
-    public static void main(String[] args) {
-        ArrayList<String> files = new ArrayList<>(Arrays.asList("/Users/peacemaker/IdeaProjects/PlagiarismChecker/src/test1.txt", "/Users/peacemaker/IdeaProjects/PlagiarismChecker/src/test2.txt", "/Users/peacemaker/IdeaProjects/PlagiarismChecker/src/test3.txt"));
-        Checker checker = new Checker(files, 3);
-        Pair pair = checker.getMatchToHighlight(1, new ArrayList<>(Arrays.asList("it", "Is", "AN")), "/Users/peacemaker/IdeaProjects/PlagiarismChecker/src/test1.txt");
-        int start = pair.first;
-        int end = pair.second;
-        System.out.println(start + " " + end);
-        for (int i = start; i < end; i++) {
-            System.out.print(checker.getFileByName("/Users/peacemaker/IdeaProjects/PlagiarismChecker/src/test1.txt").getParsed().get(1).get(i));
-        }
-        System.out.println();
-        ArrayList<ArrayList<String>> test = new ArrayList<>();
-        test.add(new ArrayList<>(Arrays.asList("that", "things", "are", "not", "always", "what", "they", "seem")));
-        test.add(new ArrayList<>(Arrays.asList("what", "they", "seem")));
-        test.add(new ArrayList<>(Arrays.asList("important", "and", "popular", "fact")));
-        System.out.println(checker.highlightMatch("/Users/peacemaker/IdeaProjects/PlagiarismChecker/src/test3.txt", 0, test, "<b>", "</b>"));
     }
 }

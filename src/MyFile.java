@@ -7,6 +7,7 @@ public class MyFile {
     private ArrayList<ArrayList<String>> tokens = new ArrayList<>();
     private ArrayList<ArrayList<String>> parsed = new ArrayList<>();
 
+    // Constructor for the MyFile Class
     public MyFile(String fileName) {
         this.name = fileName;
         readFile();
@@ -14,6 +15,7 @@ public class MyFile {
         fullParser();
     }
 
+    // Reads file character by character
     private void readFile() {
         StringBuilder sentence = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(this.name))) {
@@ -22,15 +24,16 @@ public class MyFile {
             boolean isQuote = false;
             while ((c = br.read()) != -1) {
                 char chr = (char) c;
+                // Checks that chr is not a sentence delimiter
                 if (!isSentenceDelimiter(chr)) {
                     if (chr == '"') {
                         isQuote = !isQuote;
-                        //continue;
                     }
                     if (isQuote) {
                         continue;
                     }
                     if (chr != '\n' && chr != '.') {
+                        // Checks for ellipsis, appends them to sentence straightly
                         if (dotCounter == 3) {
                             sentence.append("...");
                             dotCounter = 0;
@@ -58,6 +61,7 @@ public class MyFile {
         }
     }
 
+    // Checks if character is a sentence delimiter
     private boolean isSentenceDelimiter(char chr) {
         Set<Character> delimiters = new HashSet<Character>();
         delimiters.add('!');
@@ -65,6 +69,7 @@ public class MyFile {
         return delimiters.contains(chr);
     }
 
+    // Tokenizes sentences in the file
     private void tokenize() {
         for (String sentence : this.sentences) {
             ArrayList<String> tokenizedSentence = new ArrayList<>();
@@ -83,6 +88,7 @@ public class MyFile {
         }
     }
 
+    // Parses a full sentence
     private void fullParser() {
         StringBuilder token = new StringBuilder();
         ArrayList<String> sentence = new ArrayList<>();
@@ -91,6 +97,7 @@ public class MyFile {
             int c = 0;
             while ((c = br.read()) != -1) {
                 char chr = (char) c;
+                // Checks if character is a part of token for parsing
                 if (checkCharForParsing(chr)) {
                     token.append(chr);
                     if (dotCounter == 1) {
@@ -120,6 +127,7 @@ public class MyFile {
         }
     }
 
+    // Checks if character is a part of token for parsing, returns true if so
     private boolean checkCharForParsing(char chr) {
         if (Character.isLetter(chr) || chr == '-') {
             return true;
@@ -128,44 +136,25 @@ public class MyFile {
         }
     }
 
-    public ArrayList<String> getSentences() {
-        return sentences;
-    }
+//    public void printSentences() {
+//        for (int i = 0; i < this.sentences.size(); ++i) {
+//            System.out.println("Sentence " + (i + 1) + ": " + this.sentences.get(i));
+//        }
+//    }
+//
+//    public void printTokens() {
+//        for (int i = 0; i < this.tokens.size(); ++i) {
+//            System.out.println("Sentence " + (i + 1) + ": " + this.tokens.get(i));
+//        }
+//    }
 
-    public void printSentences() {
-        for (int i = 0; i < this.sentences.size(); ++i) {
-            System.out.println("Sentence " + (i + 1) + ": " + this.sentences.get(i));
-        }
-    }
-
+    // Getter for tokens
     public ArrayList<ArrayList<String>> getTokens() {
         return tokens;
     }
 
-    public void printTokens() {
-        for (int i = 0; i < this.tokens.size(); ++i) {
-            System.out.println("Sentence " + (i + 1) + ": " + this.tokens.get(i));
-        }
-    }
-
+    // Getter for parsed
     public ArrayList<ArrayList<String>> getParsed() {
         return parsed;
-    }
-
-    public static void main(String[] args) {
-        MyFile new_My_My_file = new MyFile("/Users/peacemaker/IdeaProjects/PlagiarismChecker/src/test1.txt");
-        new_My_My_file.printSentences();
-        new_My_My_file.printTokens();
-        System.out.println(new_My_My_file.parsed);
-        String filename = "output.txt";
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            for (ArrayList<String> sentence : new_My_My_file.parsed) {
-                for (String item : sentence) {
-                    writer.write(item);
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred while writing to file: " + e.getMessage());
-        }
     }
 }
