@@ -19,7 +19,7 @@ providing an analysis of each file's content and a measure of similarity between
 1. Clone the repository - git clone https://github.com/zakirzia/PlagiarismChecker
 2. Navigte to the repository - cd PlagiarismChecker
 3. Compile Files - javac Main.java
-5. Run the Main Class to start the Plagiarism Checker - java Main.java
+5. Run the Main Class to start the Plagiarism Checker - java Main
 
 # Usage
 1. Set the threshold length for the Phrase Matching %
